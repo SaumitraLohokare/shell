@@ -11,7 +11,10 @@ ShellRoot {
         Scope {
             id: scope
             required property ShellScreen modelData
-            property bool showClockDetails: false
+            property string currentPanel: "" // Values: "", "clock", "wifi", "volume", "oslogo"
+
+            readonly property bool hasTopLeftPanel: currentPanel === "oslogo"
+            readonly property bool hasBottomLeftPanel: ["clock", "wifi", "volume"].includes(currentPanel)
 
             // Exclusion zones
             PanelWindow {
@@ -159,10 +162,12 @@ ShellRoot {
 
                                 HoverHandler {
                                     id: logoHoverHandler
-                                    cursorShape: Qt.PointerHandCursor
+                                    cursorShape: Qt.PointingHandCursor
                                 }
 
-                                // TODO: Tap Handler
+                                TapHandler {
+                                    onTapped: scope.currentPanel = scope.currentPanel === "oslogo" ? "" : "oslogo"
+                                }
                             }
 
                             // Workspaces
@@ -275,17 +280,59 @@ ShellRoot {
                                     spacing: 6
 
                                     // WiFi Icon
-                                    Text {
-                                        anchors.horizontalCenter: parent.horizontalCenter
-                                        text: "📶" 
-                                        font.pixelSize: 14
+                                    Rectangle {
+                                        width: wifiIcon.implicitWidth + 12
+                                        height: wifiIcon.implicitHeight + 12
+                                        color: wifiHoverHandler.hovered ? "#2a2a2a" : "transparent"
+                                        radius: 4
+
+                                        Behavior on color {
+                                            ColorAnimation { duration: 150 }
+                                        }
+
+                                        Text {
+                                            id: wifiIcon
+                                            anchors.centerIn: parent
+                                            text: "📶" 
+                                            font.pixelSize: 14
+                                        }
+
+                                        HoverHandler {
+                                            id: wifiHoverHandler
+                                            cursorShape: Qt.PointingHandCursor
+                                        }
+
+                                        TapHandler {
+                                            onTapped: scope.currentPanel = scope.currentPanel === "wifi" ? "" : "wifi"
+                                        }
                                     }
 
                                     // Volume Icon
-                                    Text {
-                                        anchors.horizontalCenter: parent.horizontalCenter
-                                        text: "🔊" 
-                                        font.pixelSize: 14
+                                    Rectangle {
+                                        width: volIcon.implicitWidth + 12
+                                        height: volIcon.implicitHeight + 12
+                                        color: volHoverHandler.hovered ? "#2a2a2a" : "transparent"
+                                        radius: 4
+
+                                        Behavior on color {
+                                            ColorAnimation { duration: 150 }
+                                        }
+
+                                        Text {
+                                            id: volIcon
+                                            anchors.centerIn: parent
+                                            text: "🔊" 
+                                            font.pixelSize: 14
+                                        }
+
+                                        HoverHandler {
+                                            id: volHoverHandler
+                                            cursorShape: Qt.PointingHandCursor
+                                        }
+
+                                        TapHandler {
+                                            onTapped: scope.currentPanel = scope.currentPanel === "volume" ? "" : "volume"
+                                        }
                                     }
                                 }
                             }
@@ -356,7 +403,7 @@ ShellRoot {
                                 }
 
                                 TapHandler {
-                                    onTapped: scope.showClockDetails = !scope.showClockDetails
+                                    onTapped: scope.currentPanel = scope.currentPanel === "clock" ? "" : "clock"
                                 }
                             }
                         }
@@ -364,66 +411,16 @@ ShellRoot {
                 }
             }
 
-            // Clock details panel
-            PanelWindow {
-                id: detailsPanel
-
+            TopDetailsPanel {
                 screen: scope.modelData
-                visible: true
-
-                anchors.left: true
-                anchors.bottom: true
-
-                // Position
-                margins.left: win.barWidth - 1
-                margins.bottom: 12
-
-                width: scope.showClockDetails ? detailsText.width + 48 : 0
-                height: detailsText.height + 48
-
-                color: "transparent"
-                WlrLayershell.exclusionMode: ExclusionMode.Ignore
-
-                Behavior on width {
-                    NumberAnimation { duration: 300; easing.type: Easing.OutCubic }
-                }
-
-                Behavior on height {
-                    NumberAnimation { duration: 300; easing.type: Easing.OutCubic }
-                }
-
-                Rectangle {
-                    id: detailsContent
-                    anchors.fill: parent
-                    color: "#1a1a1a"
-                    topRightRadius: 12
-
-                    // Drop Shadow
-                    layer.enabled: true
-                    layer.effect: MultiEffect {
-                        shadowEnabled: true
-                        shadowBlur: 0.8
-                        shadowOpacity: 0.5
-                        shadowColor: "#000000"
-                    }
-
-                    Text {
-                        id: detailsText
-                        anchors.centerIn: parent
-                        anchors.margins: 16
-
-                        text: "Calendar goes here"
-                        color: "#ffffff"
-                        font.pixelSize: 16
-                        font.family: "monospace"
-
-                        // Fade in/out animation
-                        opacity: scope.showClockDetails ? 1 : 0
-                        Behavior on opacity {
-                            NumberAnimation { duration: 100 }
-                        }
-                    }
-                }
+                barWidth: win.barWidth
+                currentPanel: scope.currentPanel
+            }
+            
+            BottomDetailsPanel {
+                screen: scope.modelData
+                barWidth: win.barWidth
+                currentPanel: scope.currentPanel
             }
         }
     }
