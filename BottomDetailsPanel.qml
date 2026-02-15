@@ -68,7 +68,7 @@ PanelWindow {
             Calendar {
                 id: clockInnerContent
                 anchors.centerIn: parent
-                anchors.margins: 16
+                anchors.margins: 12
             }
         }
 
@@ -80,15 +80,10 @@ PanelWindow {
             implicitWidth: volumeInnerContent.implicitWidth
             implicitHeight: volumeInnerContent.implicitHeight
 
-            Text {
+            Volume {
                 id: volumeInnerContent
                 anchors.centerIn: parent
-                anchors.margins: 16
-
-                text: "Volume settings goes here"
-                color: "#aaaaaa"
-                font.pixelSize: 16
-                font.family: "monospace"
+                anchors.margins: 12
             }
         }
 
@@ -103,7 +98,7 @@ PanelWindow {
             Text {
                 id: wifiInnerContent
                 anchors.centerIn: parent
-                anchors.margins: 16
+                anchors.margins: 12
 
                 text: "Network list goes here"
                 color: "#aaaaaa"

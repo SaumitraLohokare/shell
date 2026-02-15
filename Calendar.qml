@@ -119,11 +119,6 @@ Item {
                 }
             }
 
-            // Spacer
-            Item {
-                Layout.fillWidth: true
-            }
-
             // Year Display
             Text {
                 anchors.verticalCenter: parent.verticalCenter
@@ -133,11 +128,6 @@ Item {
                 font.family: "monospace"
                 font.bold: true
                 horizontalAlignment: Text.AlignHCenter
-            }
-
-            // Spacer
-            Item {
-                Layout.fillWidth: true
             }
 
             // Next Month Button
