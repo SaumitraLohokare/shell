@@ -30,13 +30,17 @@ PanelWindow {
     readonly property bool hasContent: visibleContent !== null
 
     implicitWidth: hasContent ? (visibleContent?.implicitWidth ?? 0) + 48 : 0
-    implicitHeight: (visibleContent?.implicitHeight ?? 0) + 48
+    implicitHeight: hasContent ? (visibleContent?.implicitHeight ?? 0) + 48 : 0
 
     color: "transparent"
     WlrLayershell.exclusionMode: ExclusionMode.Ignore
 
     Behavior on implicitWidth {
-        NumberAnimation { duration: 250; easing.type: Easing.OutCubic }
+        NumberAnimation { duration: 250; easing.type: Easing.OutQuad }
+    }
+
+    Behavior on implicitHeight {
+        NumberAnimation { duration: 250; easing.type: Easing.OutQuad }
     }
 
     Rectangle {
@@ -61,15 +65,10 @@ PanelWindow {
             implicitWidth: clockInnerContent.implicitWidth
             implicitHeight: clockInnerContent.implicitHeight
 
-            Text {
+            Calendar {
                 id: clockInnerContent
                 anchors.centerIn: parent
                 anchors.margins: 16
-
-                text: "Calendar goes here"
-                color: "#aaaaaa"
-                font.pixelSize: 16
-                font.family: "monospace"
             }
         }
 

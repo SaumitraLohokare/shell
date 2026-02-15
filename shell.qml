@@ -399,7 +399,7 @@ ShellRoot {
 
                                 HoverHandler {
                                     id: hoverHandler
-                                    cursorShape: Qt.PointerHandCursor
+                                    cursorShape: Qt.PointingHandCursor
                                 }
 
                                 TapHandler {
